@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatRoomSignalR", "ChatRoomSignalR\ChatRoomSignalR.csproj", "{DA522AAD-8961-474D-8694-3DDF9C6272D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{CACE475E-8AFD-4434-BCC1-5768944C35F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lisb", "Lisb\Lisb.csproj", "{2C03031A-F170-4985-9FAD-5972CBF5882A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA522AAD-8961-474D-8694-3DDF9C6272D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA522AAD-8961-474D-8694-3DDF9C6272D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA522AAD-8961-474D-8694-3DDF9C6272D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA522AAD-8961-474D-8694-3DDF9C6272D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C03031A-F170-4985-9FAD-5972CBF5882A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C03031A-F170-4985-9FAD-5972CBF5882A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C03031A-F170-4985-9FAD-5972CBF5882A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C03031A-F170-4985-9FAD-5972CBF5882A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2C03031A-F170-4985-9FAD-5972CBF5882A} = {CACE475E-8AFD-4434-BCC1-5768944C35F0}
+	EndGlobalSection
+EndGlobal
