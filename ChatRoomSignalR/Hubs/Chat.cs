@@ -28,9 +28,9 @@ namespace ChatRoomSignalR.Hubs
                     var strg = UsersList.First(s => s.Tpflag == 1 && s.Freeflag == 1);
                     var userGroup = strg.UserGroup;
 
-                    strg.Freeflag = 0;
+                    //strg.Freeflag = 0;
 
-                    UsersList.Add(new UserInfo
+                    var userconnect = new UserInfo
                     {
                         ConnectionId = id,
                         UserId = userInfo.UserId,
@@ -38,15 +38,21 @@ namespace ChatRoomSignalR.Hubs
                         UserGroup = userGroup,
                         Freeflag = 0,
                         Tpflag = 0
-                    });
+                    };
 
+                    UsersList.Add(userconnect);
+
+                    //add user in group
                     Groups.Add(id, userGroup);
+
+                    //call only user connect
                     Clients.Caller.onConnected(id, username, userInfo.UserId, userGroup);
 
+                    GetAllUser();
                 }
                 else
                 {
-                    UsersList.Add(new UserInfo
+                    var userconnect = new UserInfo
                     {
                         ConnectionId = id,
                         UserId = userInfo?.UserId ?? 0,
@@ -54,11 +60,16 @@ namespace ChatRoomSignalR.Hubs
                         UserGroup = userInfo?.AdminCode.ToString(),
                         Freeflag = 1,
                         Tpflag = 1
-                    });
+                    };
+
+                    UsersList.Add(userconnect);
 
                     Groups.Add(id, userInfo?.AdminCode.ToString());
+
                     Clients.Caller.onConnected(id, username, userInfo?.UserId, userInfo?.AdminCode.ToString());
-                }
+
+                    GetAllUser();
+                }                
             }
             catch
             {
@@ -80,18 +91,21 @@ namespace ChatRoomSignalR.Hubs
                     UserGroup = strg.UserGroup
                 });
 
+                //call all user in group
                 Clients.Group(strg.UserGroup).getMessages(username,message);
             }
         }
 
+        //viết lại hàm khi user disconnected
         public override Task OnDisconnected(bool stopCalled)
         {
-            var item = UsersList.FirstOrDefault(x=>x.ConnectionId==Context.ConnectionId);
+            var id = Context.ConnectionId;
+
+            var item = UsersList.FirstOrDefault(x=>x.ConnectionId== id);
             if (item != null)
             {
                 UsersList.Remove(item);
-
-                var id = Context.ConnectionId;
+                
                 if (item.Tpflag == 0)
                 {
                     try
@@ -104,10 +118,52 @@ namespace ChatRoomSignalR.Hubs
                         Clients.Caller.NoExistAdmin();
                     }
                 }
+
+                GetAllUser();
+
                 //save conversation to dat abase
             }
 
             return base.OnDisconnected(stopCalled);
+        }
+
+        //get all user
+        [HubMethodName("getAllUser")]
+        public void GetAllUser()
+        {            
+            var list = UserRepository.GetAllUser();
+            foreach (var item in list)
+            {                
+                if (UsersList.Any(x => x.UserName == item.UserName))
+                {
+                    item.Freeflag = 1;
+                }
+            }
+
+            Clients.All.GetAllUser(list);
+        }
+
+        [HubMethodName("createGroupChat")]
+        public void CreateGroupChat(string username)
+        {
+            var userInfo1 = UsersList.Any(x => x.UserName == username) ? UsersList.First(x => x.UserName == username) : UserRepository.GetUserInfoByUserName(username);
+
+            var id = Context.ConnectionId;
+
+            var userInfo2 = UsersList.First(x => x.ConnectionId == id);
+            userInfo2.UserGroup = "chatgroup";//userInfo1.UserName + userInfo2.UserName;
+            userInfo1.UserGroup = "chatgroup"; //userInfo1.UserName + userInfo2.UserName;
+
+            //add in group
+            Groups.Add(id, userInfo2.UserGroup);
+
+            Clients.Caller.showGroupChatUserName(userInfo1);
+        }
+
+        [HubMethodName("sendMessageToGroupByUserName")]
+        public void SendMessageToGroupByUserName(string username,string groupname, string message)
+        {
+            Clients.Group(groupname).getMessagesToGroupByUserName(username, groupname,message);
         }
     }
 }
