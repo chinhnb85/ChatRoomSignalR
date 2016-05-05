@@ -128,13 +128,32 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Style.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="Game.aspx" />
+    <Content Include="GifShot.aspx" />
+    <Content Include="Modules\Game\css\jquery-ui.min.css" />
+    <Content Include="Modules\Game\css\style.css" />
+    <Content Include="Modules\Game\img\up.jpg" />
+    <Content Include="Modules\Game\js\jquery-ui.min.js" />
+    <Content Include="Modules\Game\js\jquery.chunkIt.js" />
+    <Content Include="Modules\Game\js\jquery.ui.touch-punch.min.js" />
+    <Content Include="Modules\Game\main.js" />
+    <Content Include="Modules\GifShot\img\2OO33vX.jpg" />
+    <Content Include="Modules\GifShot\img\qOwVaSN.png" />
+    <Content Include="Modules\GifShot\img\Vo5mFZJ.gif" />
+    <Content Include="Modules\GifShot\js\gifshot.min.js" />
+    <Content Include="Modules\GifShot\main.js" />
+    <Content Include="Modules\GifShot\videos\example.mp4" />
+    <Content Include="Modules\Pinterest\img\6RMhx.gif" />
+    <Content Include="Modules\Pinterest\pinterest.js" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="PinterrestByMasonry.aspx" />
     <Content Include="Scripts\App.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Modules\Pinterest\js\imagesloaded.pkgd.min.js" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
@@ -143,6 +162,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Modules\GifShot\videos\example.ogv" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -159,6 +179,7 @@
     <Content Include="Scripts\jquery-2.2.3.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Modules\Pinterest\js\masonry.pkgd.min.js" />
     <Content Include="Web.config" />
     <Content Include="Site.Master" />
   </ItemGroup>
@@ -170,7 +191,28 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Game.aspx.cs">
+      <DependentUpon>Game.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Game.aspx.designer.cs">
+      <DependentUpon>Game.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GifShot.aspx.cs">
+      <DependentUpon>GifShot.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GifShot.aspx.designer.cs">
+      <DependentUpon>GifShot.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Hubs\Chat.cs" />
+    <Compile Include="PinterrestByMasonry.aspx.cs">
+      <DependentUpon>PinterrestByMasonry.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PinterrestByMasonry.aspx.designer.cs">
+      <DependentUpon>PinterrestByMasonry.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -187,6 +229,7 @@
       <Name>Lisb</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

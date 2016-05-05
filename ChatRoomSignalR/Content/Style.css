@@ -1,5 +1,5 @@
 ﻿body {
-    margin: 0;padding: 0;font-size: 13px;color: #333;font-family: Arial;
+    margin: 0;padding: 0;font-size: 13px;color: #333;font-family: Arial;background-color:#EEEEEE;
 }
 #divListUser {
     width: 20%;
@@ -54,3 +54,52 @@
     right: 10px;
     cursor: pointer;
 }
+/*css pinterest*/
+#wrapper
+{
+    max-width: 62.5em; /* 1000 px */
+    margin: 0 auto;
+}
+#imgLoad
+{
+    position:fixed;
+    bottom:0;   
+    left:40%;
+    display:none;
+}
+#list
+{
+    width: 100%;       
+}
+.box
+{
+    padding: 10px;
+    margin: 5px;
+    background-color:#FFFFFF;
+    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+    width: 290px;height: 300px;
+    overflow: hidden;
+}
+@media only screen and ( max-width: 40em ) /* 640px */
+{
+    .box
+    {
+        width: 46.876%; /* 305px */
+        margin-bottom: 0.938em; /* 15px */
+    }
+}
+@media only screen and ( max-width: 20em ) /* 640px */
+{
+    #list
+    {
+        width: 100%;
+        margin-left: 0;
+    }
+    .box
+    {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+

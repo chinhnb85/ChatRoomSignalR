@@ -1,0 +1,19 @@
+ul.grid {
+        padding: 0px;
+    }
+    
+    ul.grid li {
+        list-style: none;
+        display: block;
+        border: 0px solid #CCC;
+        float: left;
+        line-height: 0px;
+    }
+    
+    #imageGrid1 li {
+        cursor: move;
+    }
+    
+    .ui-draggable-dragging {
+        z-index: 9999;
+    }

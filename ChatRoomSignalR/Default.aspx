@@ -1,10 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="ChatRoomSignalR.Default" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="/Content/Style.css?v=<%=DateTime.Now.Ticks %>" rel="stylesheet" />
-    <link href="/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="/Content/font-awesome.min.css" rel="stylesheet" />
-    <script src="/scripts/jquery-2.2.3.min.js"></script>
-    <script src="Scripts/bootstrap.min.js"></script>
+    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
