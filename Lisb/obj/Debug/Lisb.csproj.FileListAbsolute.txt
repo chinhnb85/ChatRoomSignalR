@@ -12,4 +12,3 @@ E:\VCcorp\SignalR\ChatRoomSignalR\Lisb\bin\Debug\Lisb.pdb
 E:\VCcorp\SignalR\ChatRoomSignalR\Lisb\obj\Debug\Lisb.csprojResolveAssemblyReference.cache
 E:\VCcorp\SignalR\ChatRoomSignalR\Lisb\obj\Debug\Lisb.dll
 E:\VCcorp\SignalR\ChatRoomSignalR\Lisb\obj\Debug\Lisb.pdb
-D:\VCcorp\SignalR\ChatRoomSignalR\Lisb\obj\Debug\Lisb.csprojResolveAssemblyReference.cache

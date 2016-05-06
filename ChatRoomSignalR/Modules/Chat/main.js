@@ -4,7 +4,13 @@ $(function () {
 });
 
 IMSSRChat = new function () {
-    
+    var chatRooms = 0;
+
+    window.onbeforeunload = function () {
+        if (chatRooms > 0)
+            return "Tất cả các ô chat của bạn sẽ kết thúc!";
+    };
+
     this.Init = function() {
         var objHub = $.connection.chatRoom;        
 
@@ -89,21 +95,23 @@ IMSSRChat = new function () {
             var chatRoomDiv = $('#chatRoom' + chatRoom.RoomId);
             if (($(chatRoomDiv).length > 0)) {
                 var chatRoomText = $('#newmessage' + chatRoom.RoomId);
-                var chatRoomSend = $('#chatsend' + chatRoom.RoomId);
-                var chatRoomEndChat = $('#chatend' + chatRoom.RoomId);
+                var chatRoomSend = $('#chatsend' + chatRoom.RoomId);                
 
                 chatRoomText.show();
-                chatRoomSend.show();
-                chatRoomEndChat.show();
+                chatRoomSend.show();                
             }
             else {
                 var e = $('#new-chatroom-template').tmpl(chatRoom);
                 var c = $('#new-chat-header').tmpl(chatRoom);
+
+                var u = $('#hUserId').val() === chatRoom.InitiatedBy ? chatRoom.Users[1].UserName : chatRoom.Users[0].UserName;
                 
+                chatRooms++;
+
                 //dialog options
                 var dialogOptions = {
                     "id": '#messages' + chatRoom.RoomId,
-                    "title": c,
+                    "title": u,
                     "width": 360,
                     "height": 365,
                     "modal": false,
@@ -170,14 +178,14 @@ IMSSRChat = new function () {
             var chatRoom = $('#chatRoom' + chatMessage.ConversationId);
             var chatRoomMessages = $('#messages' + chatMessage.ConversationId);
             var chatRoomText = $('#newmessage' + chatMessage.ConversationId);
-            var chatRoomSend = $('#chatsend' + chatMessage.ConversationId);
-            var chatRoomEndChat = $('#chatend' + chatMessage.ConversationId);            
+            var chatRoomSend = $('#chatsend' + chatMessage.ConversationId);                        
+
+            chatRooms--;
 
             var e = $('#new-notify-message-template').tmpl(chatMessage).appendTo(chatRoomMessages);
 
             chatRoomText.hide();
-            chatRoomSend.hide();
-            chatRoomEndChat.hide();
+            chatRoomSend.hide();            
 
             e[0].scrollIntoView();
             chatRoom.scrollIntoView();

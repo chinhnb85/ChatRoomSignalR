@@ -27,7 +27,7 @@ namespace ChatRoomSignalR.Hubs
 
         public override Task OnDisconnected(bool stopCalled)
         {            
-            DeleteUser();
+            DeleteUser(Context.ConnectionId);
             GetAllOnlineUsers();
             return base.OnDisconnected(stopCalled);
         }
@@ -86,13 +86,11 @@ namespace ChatRoomSignalR.Hubs
                 var toUser = GetChatUserByUserId(toUserId);
 
                 if (fromUser != null && toUser != null)
-                {
-                    var chatRoom = GetRoomId(fromUser, toUser);
-
-                    if (chatRoom==null)//!CheckIfRoomExists(fromUser, toUser)
+                {                    
+                    if (!CheckIfRoomExists(fromUser, toUser))//!CheckIfRoomExists(fromUser, toUser)
                     {
                         //Create New Chat Room
-                        chatRoom = new Room();
+                        var chatRoom = new Room();
                         chatRoom.InitiatedBy = fromUser.Id;
                         chatRoom.InitiatedTo = toUser.Id;
 
@@ -114,9 +112,13 @@ namespace ChatRoomSignalR.Hubs
                         }
                     }
                     else
-                    {                                                
-                        //Generate Client UI for this room
-                        Clients.Caller.initiateChatUI(chatRoom);                        
+                    {
+                        var chatRoom = GetRoomId(fromUser, toUser);
+                        if (true)
+                        {
+                            //Generate Client UI for this room
+                            Clients.Caller.initiateChatUI(chatRoom);
+                        }
                     }                    
                 }
                 return true;
@@ -135,12 +137,12 @@ namespace ChatRoomSignalR.Hubs
                 Room room;
                 if (ChatRooms.TryGetValue(message.ConversationId, out room))
                 {
-                    if (ChatRooms[room.RoomId].InitiatedBy == message.UserId.ToString())
+                    if (ChatRooms[room.RoomId].InitiatedBy == message.UserId)
                     {
                         message.MessageText = string.Format("{0} left the chat. Chat Ended!", message.UserName);
                         if (ChatRooms.TryRemove(room.RoomId, out room))
                         {
-                            Clients.Client(room.RoomId).receiveEndChatMessage(message);
+                            Clients.Group(room.RoomId).receiveEndChatMessage(message);
                             foreach (var messageReceipient in room.Users)
                             {
                                 if (messageReceipient.RoomIds.Contains(room.RoomId))
@@ -163,7 +165,7 @@ namespace ChatRoomSignalR.Hubs
                                 message.MessageText = string.Format("{0} left the chat. Chat Ended!", message.UserName);
                                 if (ChatRooms.TryRemove(room.RoomId, out room))
                                 {
-                                    Clients.Client(room.RoomId).receiveEndChatMessage(message);
+                                    Clients.Group(room.RoomId).receiveEndChatMessage(message);
                                     foreach (var messageReceipient in room.Users)
                                     {
                                         if (messageReceipient.RoomIds.Contains(room.RoomId))
@@ -178,17 +180,13 @@ namespace ChatRoomSignalR.Hubs
                             {
                                 message.MessageText = string.Format("{0} left the chat.", message.UserName);
                                 Groups.Remove(messageRecipient.ConnectionId, room.RoomId);
-                                Clients.Client(messageRecipient.ConnectionId).receiveEndChatMessage(message);
-                                Clients.Client(room.RoomId).receiveLeftChatMessage(message);
-                                Clients.Client(room.RoomId).updateChatUI(room);
+                                Clients.Group(messageRecipient.ConnectionId).receiveEndChatMessage(message);
+                                Clients.Group(room.RoomId).receiveLeftChatMessage(message);
+                                Clients.Group(room.RoomId).updateChatUI(room);
                             }
                         }
                     }
-                }
-                else
-                {
-                    throw new InvalidOperationException("Problem in ending chat!");
-                }
+                }                
                 return true;
             }
             catch (Exception ex)
@@ -215,7 +213,7 @@ namespace ChatRoomSignalR.Hubs
                     throw new InvalidOperationException("Problem in sending message!");
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw new InvalidOperationException("Problem in sending message!");
             }
@@ -258,15 +256,81 @@ namespace ChatRoomSignalR.Hubs
             ChatUsers[obj.Id] = user;            
         }
 
-        private bool DeleteUser()
-        {            
-            User oUser;
-            return ChatUsers.TryRemove(Context.ConnectionId, out oUser);            
+        private bool DeleteUser(string connectionId)
+        {
+            var returnValue = false;
+            var user = GetChatUserByConnectionId(connectionId);
+            if (user != null && ChatUsers.ContainsKey(user.Id))
+            {
+                User oUser;
+                returnValue = ChatUsers.TryRemove(user.Id, out oUser);
+
+                //remoave from all groups and chatrooms
+                foreach (string roomId in oUser.RoomIds)
+                {
+                    ChatRooms[roomId].Users.Remove(oUser);
+
+                    Groups.Remove(oUser.ConnectionId, roomId);
+
+                    //notify user left chat
+                    Message chatMessage = new Message();
+                    chatMessage.ConversationId = roomId;
+                    chatMessage.UserId = oUser.Id;
+                    chatMessage.UserName = oUser.UserName;
+                    if (ChatRooms[roomId].InitiatedBy == oUser.Id)
+                    {
+                        chatMessage.MessageText = string.Format("{0} left the chat. Chat Ended!", oUser.UserName);
+                        Room room;
+
+                        if (ChatRooms.TryRemove(roomId, out room))
+                        {
+                            foreach (var messageReceipient in room.Users)
+                            {
+                                if (messageReceipient.RoomIds.Contains(roomId))
+                                {
+                                    messageReceipient.RoomIds.Remove(roomId);
+                                }
+                            }
+                            Clients.Group(roomId).receiveEndChatMessage(chatMessage);
+                        }
+                    }
+                    else
+                    {
+                        if (ChatRooms[roomId].Users.Count() < 2)
+                        {
+                            chatMessage.MessageText = string.Format("{0} left the chat. Chat Ended!", oUser.UserName);
+                            Room room;
+                            if (ChatRooms.TryRemove(roomId, out room))
+                            {
+                                foreach (var messageReceipient in room.Users)
+                                {
+                                    if (messageReceipient.RoomIds.Contains(roomId))
+                                    {
+                                        messageReceipient.RoomIds.Remove(roomId);
+                                    }
+                                }
+                                Clients.Group(roomId).receiveEndChatMessage(chatMessage);
+                            }
+                        }
+                        else
+                        {
+                            chatMessage.MessageText = string.Format("{0} left the chat.", oUser.UserName);
+                            Clients.Group(roomId).receiveLeftChatMessage(chatMessage);
+                        }
+                    }
+                }
+            }
+            return returnValue;
         }
 
         private User GetChatUserByUserId(string userId)
         {
             return ChatUsers.Values.FirstOrDefault(u => u.Id == userId);
+        }
+
+        private User GetChatUserByConnectionId(string connectionId)
+        {
+            return ChatUsers.Values.FirstOrDefault(u => u.ConnectionId == connectionId);
         }
 
         private bool CheckIfRoomExists(User fromUser, User toUser)
@@ -279,8 +343,9 @@ namespace ChatRoomSignalR.Hubs
                 {
                     return true;
                 }
+                return false;
 
-                return toUser.RoomIds.Select(roomId => (from mr in ChatRooms[roomId].Users where mr.Id == fromUser.Id select mr).Count()).Any(count => count > 0);
+                //return toUser.RoomIds.Select(roomId => (from mr in ChatRooms[roomId].Users where mr.Id == fromUser.Id select mr).Count()).Any(count => count > 0);
 
                 //foreach (var roomId in fromUser.RoomIds)
                 //{
