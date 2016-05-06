@@ -41,9 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity\MessageInfo.cs" />
+    <Compile Include="Entity\OnlineUsers.cs" />
+    <Compile Include="Entity\Room.cs" />
+    <Compile Include="Entity\Message.cs" />
     <Compile Include="Entity\Product.cs" />
-    <Compile Include="Entity\UserInfo.cs" />
+    <Compile Include="Entity\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />

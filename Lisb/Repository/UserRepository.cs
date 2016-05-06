@@ -13,9 +13,9 @@ namespace Lisb.Repository
     public class UserRepository
     {
         private static readonly string ConnectString = ConfigurationManager.ConnectionStrings["conn"].ConnectionString;
-        public static UserInfo GetUserInfoByUserNameAndPassword(string username,string password)
+        public static User GetUserInfoByUserNameAndPassword(string username,string password)
         {
-            var userInfo = new UserInfo();
+            var userInfo = new User();
             try
             {
                 using (var connection=new SqlConnection(ConnectString))
@@ -31,7 +31,7 @@ namespace Lisb.Repository
                         dt.Load(render);
                         if (dt.Rows.Count > 0)
                         {
-                            userInfo.UserId = Convert.ToInt32(dt.Rows[0]["Id"].ToString());
+                            userInfo.Id = dt.Rows[0]["Id"].ToString();
                             userInfo.UserName = dt.Rows[0]["UserName"].ToString();
                             userInfo.AdminCode = Convert.ToInt32(dt.Rows[0]["AdminCode"].ToString());
                         }
@@ -46,9 +46,9 @@ namespace Lisb.Repository
             }
         }
 
-        public static List<UserInfo> GetAllUser()
+        public static List<User> GetAllUser()
         {
-            var list = new List<UserInfo>();
+            var list = new List<User>();
             try
             {
                 using (var connection = new SqlConnection(ConnectString))
@@ -66,9 +66,9 @@ namespace Lisb.Repository
                         {
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
-                                list.Add(new UserInfo
+                                list.Add(new User
                                 {
-                                    UserId = Convert.ToInt32(dt.Rows[i]["Id"].ToString()),
+                                    Id = dt.Rows[i]["Id"].ToString(),
                                     UserName = dt.Rows[i]["UserName"].ToString(),
                                     AdminCode = Convert.ToInt32(dt.Rows[i]["AdminCode"].ToString())
                                 });
@@ -86,9 +86,9 @@ namespace Lisb.Repository
             }
         }
 
-        public static UserInfo GetUserInfoByUserName(string username)
+        public static User GetUserInfoByUserName(string username)
         {
-            var userInfo = new UserInfo();
+            var userInfo = new User();
             try
             {
                 using (var connection = new SqlConnection(ConnectString))
@@ -104,7 +104,7 @@ namespace Lisb.Repository
                         dt.Load(render);
                         if (dt.Rows.Count > 0)
                         {
-                            userInfo.UserId = Convert.ToInt32(dt.Rows[0]["Id"].ToString());
+                            userInfo.Id = dt.Rows[0]["Id"].ToString();
                             userInfo.UserName = dt.Rows[0]["UserName"].ToString();
                             userInfo.AdminCode = Convert.ToInt32(dt.Rows[0]["AdminCode"].ToString());
                         }

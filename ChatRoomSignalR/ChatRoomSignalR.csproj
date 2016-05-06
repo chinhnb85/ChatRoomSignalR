@@ -122,14 +122,30 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Chat.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Style.css" />
+    <Content Include="Flatform.aspx" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Game.aspx" />
     <Content Include="GifShot.aspx" />
+    <Content Include="Modules\Chat\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Modules\Chat\css\images\ui-icons_444444_256x240.png" />
+    <Content Include="Modules\Chat\css\images\ui-icons_555555_256x240.png" />
+    <Content Include="Modules\Chat\css\images\ui-icons_777620_256x240.png" />
+    <Content Include="Modules\Chat\css\images\ui-icons_777777_256x240.png" />
+    <Content Include="Modules\Chat\css\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Modules\Chat\css\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Modules\Chat\css\jquery-ui.min.css" />
+    <Content Include="Modules\Chat\css\style.css" />
+    <Content Include="Modules\Chat\js\jquery-ui.min.js" />
+    <Content Include="Modules\Chat\js\jquery.dialogextend.min.js" />
+    <Content Include="Modules\Chat\js\jquery.tmpl.js" />
+    <Content Include="Modules\Chat\main.js" />
+    <Content Include="Modules\Flatform\js\platform.js" />
     <Content Include="Modules\Game\css\jquery-ui.min.css" />
     <Content Include="Modules\Game\css\style.css" />
     <Content Include="Modules\Game\img\up.jpg" />
@@ -150,7 +166,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PinterrestByMasonry.aspx" />
-    <Content Include="Scripts\App.js" />
+    <Content Include="Modules\Home\main.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Modules\Pinterest\js\imagesloaded.pkgd.min.js" />
@@ -184,12 +200,26 @@
     <Content Include="Site.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat.aspx.cs">
+      <DependentUpon>Chat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Chat.aspx.designer.cs">
+      <DependentUpon>Chat.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Flatform.aspx.cs">
+      <DependentUpon>Flatform.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Flatform.aspx.designer.cs">
+      <DependentUpon>Flatform.aspx</DependentUpon>
     </Compile>
     <Compile Include="Game.aspx.cs">
       <DependentUpon>Game.aspx</DependentUpon>
@@ -206,6 +236,7 @@
       <DependentUpon>GifShot.aspx</DependentUpon>
     </Compile>
     <Compile Include="Hubs\Chat.cs" />
+    <Compile Include="Hubs\ChatRoom.cs" />
     <Compile Include="PinterrestByMasonry.aspx.cs">
       <DependentUpon>PinterrestByMasonry.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

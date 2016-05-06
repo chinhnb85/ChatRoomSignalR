@@ -31,8 +31,6 @@
     <input id="hUserName" type="hidden" />
     <input id="hGroup" type="hidden" />
     
-<script src="scripts/jquery.signalR-2.2.0.min.js"></script>
-<script src="/signalr/hubs" type="text/javascript"></script>
-<script src="/Scripts/App.js"></script>
+<script src="/Modules/Home/main.js"></script>
 
 </asp:Content>

@@ -12,8 +12,15 @@ namespace ChatRoomSignalR.Hubs
     [HubName("chat")]
     public class Chat:Hub
     {
-        private static readonly List<UserInfo> UsersList=new List<UserInfo>();
-        private static readonly List<MessageInfo> MessagelList = new List<MessageInfo>();
+        private static readonly List<User> UsersList=new List<User>();
+        private static readonly List<Message> MessagelList = new List<Message>();
+
+        public override Task OnConnected()
+        {
+            var id = Context.ConnectionId;
+
+            return base.OnConnected();
+        }
 
         [HubMethodName("connect")]
         public void Connect(string username, string password)
@@ -30,10 +37,10 @@ namespace ChatRoomSignalR.Hubs
 
                     //strg.Freeflag = 0;
 
-                    var userconnect = new UserInfo
+                    var userconnect = new User
                     {
                         ConnectionId = id,
-                        UserId = userInfo.UserId,
+                        Id = userInfo.Id,
                         UserName = username,
                         UserGroup = userGroup,
                         Freeflag = 0,
@@ -46,16 +53,16 @@ namespace ChatRoomSignalR.Hubs
                     Groups.Add(id, userGroup);
 
                     //call only user connect
-                    Clients.Caller.onConnected(id, username, userInfo.UserId, userGroup);
+                    Clients.Caller.onConnected(id, username, userInfo.Id, userGroup);
 
                     GetAllUser();
                 }
                 else
                 {
-                    var userconnect = new UserInfo
+                    var userconnect = new User
                     {
                         ConnectionId = id,
-                        UserId = userInfo?.UserId ?? 0,
+                        Id = userInfo?.Id ?? "0",
                         UserName = username,
                         UserGroup = userInfo?.AdminCode.ToString(),
                         Freeflag = 1,
@@ -66,14 +73,14 @@ namespace ChatRoomSignalR.Hubs
 
                     Groups.Add(id, userInfo?.AdminCode.ToString());
 
-                    Clients.Caller.onConnected(id, username, userInfo?.UserId, userInfo?.AdminCode.ToString());
+                    Clients.Caller.onConnected(id, username, userInfo?.Id, userInfo?.AdminCode.ToString());
 
                     GetAllUser();
                 }                
             }
             catch
             {
-                string msg = "All Administrators are busy, please be patient and try again";
+                //string msg = "All Administrators are busy, please be patient and try again";
                 Clients.Caller.NoExistAdmin();
             }
         }
@@ -84,10 +91,10 @@ namespace ChatRoomSignalR.Hubs
             if (UsersList.Count > 0)
             {
                 var strg = UsersList.First(s=>s.UserName==username);
-                MessagelList.Add(new MessageInfo
+                MessagelList.Add(new Message
                 {
                     UserName = username,
-                    Message = message,
+                    MessageText = message,
                     UserGroup = strg.UserGroup
                 });
 
