@@ -132,6 +132,7 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Game.aspx" />
     <Content Include="GifShot.aspx" />
+    <Content Include="Login.aspx" />
     <Content Include="Modules\Chat\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Modules\Chat\css\images\ui-icons_444444_256x240.png" />
     <Content Include="Modules\Chat\css\images\ui-icons_555555_256x240.png" />
@@ -159,6 +160,7 @@
     <Content Include="Modules\GifShot\js\gifshot.min.js" />
     <Content Include="Modules\GifShot\main.js" />
     <Content Include="Modules\GifShot\videos\example.mp4" />
+    <Content Include="Modules\Login\main.js" />
     <Content Include="Modules\Pinterest\img\6RMhx.gif" />
     <Content Include="Modules\Pinterest\pinterest.js" />
     <Content Include="packages.config" />
@@ -179,6 +181,7 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="Modules\GifShot\videos\example.ogv" />
+    <None Include="Properties\PublishProfiles\chatdemo.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -237,6 +240,13 @@
     </Compile>
     <Compile Include="Hubs\Chat.cs" />
     <Compile Include="Hubs\ChatRoom.cs" />
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PinterrestByMasonry.aspx.cs">
       <DependentUpon>PinterrestByMasonry.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

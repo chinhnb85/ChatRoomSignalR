@@ -24,7 +24,7 @@ namespace Lisb.Entity
 
         public string DisplayPrefix
         {
-            get { return string.Format("[{0}] {1}",MsgDate.ToShortTimeString(),UserName); }            
+            get { return string.Format("[{0}] {1}: ",MsgDate.ToShortTimeString(),UserName); }            
         }
     }
 }

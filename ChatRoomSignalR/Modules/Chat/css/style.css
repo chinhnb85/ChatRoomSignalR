@@ -12,10 +12,10 @@
 .chatMessages
 {
     width: 100%;
-    height: 200px;
+    height: 250px;
     overflow: auto;
-    margin-left: 0px;
-    padding-left: 0px;
+    margin-left: 0;
+    padding-left: 0;
 }
 .chatMessages li
 {
@@ -25,9 +25,9 @@
 .chatNewMessage
 {
     border: 1px solid #ccc;
-    width: 200px;
+    width: 250px;
     float: left;
-    height: 18px;
+    height: 30px;
 }
 .chatMessage
 {
@@ -36,6 +36,7 @@
 {
     float: left;
 }
+.ui-dialog .ui-dialog-titlebar-close{ height: 18px;}
 #chatOnlineUser {
     width: 20%;
     min-width: 150px;
@@ -44,6 +45,7 @@
     top: 0;
     right: 0;
     border-left: 1px solid #ccc;
+    display: none;
 }
 #chatOnlineUser ul{ list-style: none;}
 .offline{ width: 10px;height: 10px;background: #ccc;border-radius: 50%;display: inline-block;}

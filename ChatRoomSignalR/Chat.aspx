@@ -7,11 +7,7 @@
     <script src="/Modules/Chat/js/jquery.tmpl.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div id="divLogin" class="mylogin">
-        User Name:<input id="txtUserName" type="text" /><br />
-        Password :<input id="txtPassword" type="password" /><br />
-        <input id="btnLogin" type="button" value="Login" />        
-    </div>
+    
     <div id="welcome"></div>
     <div id="chatError"></div>
     <div id="chatRooms"></div>

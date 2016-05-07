@@ -41,7 +41,7 @@ namespace ChatRoomSignalR.Hubs
         {            
             try
             {
-                var user = UserRepository.GetUserInfoByUserNameAndPassword(username, password);
+                var user = UserRepository.GetUserInfoByUserName(username);                
 
                 if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || user == null)
                 {
@@ -58,7 +58,7 @@ namespace ChatRoomSignalR.Hubs
                 }
 
                 //call only user connect
-                Clients.Caller.onConnected(user);
+                Clients.Caller.onConnected(user);                                
 
                 GetAllOnlineUsers();
 
@@ -87,7 +87,7 @@ namespace ChatRoomSignalR.Hubs
 
                 if (fromUser != null && toUser != null)
                 {                    
-                    if (!CheckIfRoomExists(fromUser, toUser))//!CheckIfRoomExists(fromUser, toUser)
+                    if (!CheckIfRoomExists(fromUser, toUser))
                     {
                         //Create New Chat Room
                         var chatRoom = new Room();
@@ -123,9 +123,11 @@ namespace ChatRoomSignalR.Hubs
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new InvalidOperationException("Problem in starting chat!");
+                const string msg = "Gặp sự cố trong việc khởi động chat!";
+                Clients.Caller.OnErrorMessage(msg);
+                return false;                
             }
         }
 
@@ -139,7 +141,7 @@ namespace ChatRoomSignalR.Hubs
                 {
                     if (ChatRooms[room.RoomId].InitiatedBy == message.UserId)
                     {
-                        message.MessageText = string.Format("{0} left the chat. Chat Ended!", message.UserName);
+                        message.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", message.UserName);
                         if (ChatRooms.TryRemove(room.RoomId, out room))
                         {
                             Clients.Group(room.RoomId).receiveEndChatMessage(message);
@@ -162,7 +164,7 @@ namespace ChatRoomSignalR.Hubs
                             messageRecipient.RoomIds.Remove(room.RoomId);
                             if (room.Users.Count < 2)
                             {
-                                message.MessageText = string.Format("{0} left the chat. Chat Ended!", message.UserName);
+                                message.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", message.UserName);
                                 if (ChatRooms.TryRemove(room.RoomId, out room))
                                 {
                                     Clients.Group(room.RoomId).receiveEndChatMessage(message);
@@ -178,7 +180,7 @@ namespace ChatRoomSignalR.Hubs
                             }
                             else
                             {
-                                message.MessageText = string.Format("{0} left the chat.", message.UserName);
+                                message.MessageText = string.Format("{0} ngừng trò chuyện.", message.UserName);
                                 Groups.Remove(messageRecipient.ConnectionId, room.RoomId);
                                 Clients.Group(messageRecipient.ConnectionId).receiveEndChatMessage(message);
                                 Clients.Group(room.RoomId).receiveLeftChatMessage(message);
@@ -189,9 +191,11 @@ namespace ChatRoomSignalR.Hubs
                 }                
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new InvalidOperationException("Problem in ending chat!");
+                const string msg = "Gặp sự cố trong việc kết thúc chat!";
+                Clients.Caller.OnErrorMessage(msg);
+                return false;                
             }
         }
 
@@ -208,14 +212,13 @@ namespace ChatRoomSignalR.Hubs
                     Clients.Group(message.ConversationId).receiveChatMessage(message, room);
                     return true;
                 }
-                else
-                {
-                    throw new InvalidOperationException("Problem in sending message!");
-                }
+                return false;
             }
             catch
             {
-                throw new InvalidOperationException("Problem in sending message!");
+                const string msg = "Gặp sự cố trong việc gửi message!";
+                Clients.Caller.OnErrorMessage(msg);
+                return false;                
             }
         }
 
@@ -279,7 +282,7 @@ namespace ChatRoomSignalR.Hubs
                     chatMessage.UserName = oUser.UserName;
                     if (ChatRooms[roomId].InitiatedBy == oUser.Id)
                     {
-                        chatMessage.MessageText = string.Format("{0} left the chat. Chat Ended!", oUser.UserName);
+                        chatMessage.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", oUser.UserName);
                         Room room;
 
                         if (ChatRooms.TryRemove(roomId, out room))
@@ -298,7 +301,7 @@ namespace ChatRoomSignalR.Hubs
                     {
                         if (ChatRooms[roomId].Users.Count() < 2)
                         {
-                            chatMessage.MessageText = string.Format("{0} left the chat. Chat Ended!", oUser.UserName);
+                            chatMessage.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", oUser.UserName);
                             Room room;
                             if (ChatRooms.TryRemove(roomId, out room))
                             {
@@ -314,7 +317,7 @@ namespace ChatRoomSignalR.Hubs
                         }
                         else
                         {
-                            chatMessage.MessageText = string.Format("{0} left the chat.", oUser.UserName);
+                            chatMessage.MessageText = string.Format("{0} ngừng trò chuyện.", oUser.UserName);
                             Clients.Group(roomId).receiveLeftChatMessage(chatMessage);
                         }
                     }
