@@ -1,0 +1,106 @@
+﻿body {
+    margin: 0;padding: 0;font-size: 13px;color: #333;font-family: Arial;background-color:#EEEEEE;
+}
+#divListUser {
+    width: 20%;
+    min-width: 150px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    border-left: 1px solid #ccc;
+}
+#divListUser ul{ list-style: none;}
+.offline{ width: 10px;height: 10px;background: #ccc;border-radius: 50%;display: inline-block;}
+.online{width: 10px;height: 10px;background: green;border-radius: 50%;display: inline-block;}
+
+/*chat*/
+#divChatForUserName {
+    position: fixed;
+    bottom: 0;
+    right: 20%;
+}
+.w_chat {
+    float: left;
+    width: 280px;
+    height: 300px;
+    border: 1px solid #ccc;
+    display: block;
+    position: relative;
+    margin: 5px;
+}
+.w_chat .title_chat {
+    display: block;height: 35px;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+    position: relative;
+}
+.w_chat .body_chat {
+    display: block;
+    padding: 10px;
+}
+.w_chat .foot_chat {
+    display: block;
+    padding: 5px;
+    height: 40px;
+    border-top: 1px solid #ccc;
+    position: absolute;
+    bottom: 0;left: 0;
+    width: 100%;
+}
+.w_chat .btnClose {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/*css pinterest*/
+#wrapper
+{
+    max-width: 62.5em; /* 1000 px */
+    margin: 0 auto;
+}
+#imgLoad
+{
+    position:fixed;
+    bottom:0;   
+    left:40%;
+    display:none;
+}
+#list
+{
+    width: 100%;       
+}
+.box
+{
+    padding: 10px;
+    margin: 5px;
+    background-color:#FFFFFF;
+    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+    width: 290px;height: 300px;
+    overflow: hidden;
+}
+@media only screen and ( max-width: 40em ) /* 640px */
+{
+    .box
+    {
+        width: 46.876%; /* 305px */
+        margin-bottom: 0.938em; /* 15px */
+    }
+}
+@media only screen and ( max-width: 20em ) /* 640px */
+{
+    #list
+    {
+        width: 100%;
+        margin-left: 0;
+    }
+    .box
+    {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+

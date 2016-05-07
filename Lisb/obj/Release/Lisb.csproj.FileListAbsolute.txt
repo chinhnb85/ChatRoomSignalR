@@ -1,0 +1,5 @@
+D:\VCcorp\SignalR\ChatRoomSignalR\Lisb\bin\Release\Lisb.dll
+D:\VCcorp\SignalR\ChatRoomSignalR\Lisb\bin\Release\Lisb.pdb
+D:\VCcorp\SignalR\ChatRoomSignalR\Lisb\obj\Release\Lisb.csprojResolveAssemblyReference.cache
+D:\VCcorp\SignalR\ChatRoomSignalR\Lisb\obj\Release\Lisb.dll
+D:\VCcorp\SignalR\ChatRoomSignalR\Lisb\obj\Release\Lisb.pdb

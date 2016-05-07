@@ -1,0 +1,52 @@
+﻿.chatRooms
+{
+    max-height: 500px;
+    overflow: auto;
+}
+.chatRoom
+{
+    width: 100%;
+    height: 250px;
+    border: 1px solid #ccc;
+}
+.chatMessages
+{
+    width: 100%;
+    height: 250px;
+    overflow: auto;
+    margin-left: 0;
+    padding-left: 0;
+}
+.chatMessages li
+{
+    list-style-type: none;
+    padding: 1px;
+}
+.chatNewMessage
+{
+    border: 1px solid #ccc;
+    width: 250px;
+    float: left;
+    height: 30px;
+}
+.chatMessage
+{
+}
+.chatSend
+{
+    float: left;
+}
+.ui-dialog .ui-dialog-titlebar-close{ height: 18px;}
+#chatOnlineUser {
+    width: 20%;
+    min-width: 150px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    border-left: 1px solid #ccc;
+    display: none;
+}
+#chatOnlineUser ul{ list-style: none;}
+.offline{ width: 10px;height: 10px;background: #ccc;border-radius: 50%;display: inline-block;}
+.online{width: 10px;height: 10px;background: green;border-radius: 50%;display: inline-block;}
