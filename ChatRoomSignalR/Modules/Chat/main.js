@@ -126,8 +126,8 @@ IMSSRChat = new function () {
                 var dialogOptions = {
                     "id": '#messages' + chatRoom.RoomId,
                     "title": u,
-                    "width": 360,
-                    "height": 365,
+                    "width": 280,
+                    "height": 355,
                     "modal": false,
                     "resizable": false,
                     "close": function () { javascript: IMSSRChat.endChat(objHub,'' + chatRoom.RoomId + ''); $(this).remove(); }

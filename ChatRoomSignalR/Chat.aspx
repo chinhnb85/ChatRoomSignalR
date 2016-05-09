@@ -23,7 +23,13 @@
     <script id="new-online-contacts" type="text/x-jquery-tmpl">        
         <ul>
         {%each Users%}
-            <li id="chatLink${Id}"><img class="imgAvatar" src="{%if $index==1 %} /Modules/Chat/css/images/noavatar.png {%else%} ${Avatar} {%/if%}"/><a class="chatLink" href="javascript:;" data-id="${Id}" data-username="${UserName}">${FullName} <i class="online"></i></a></li>
+            <li id="chatLink${Id}">
+                <a class="chatLink" href="javascript:;" data-id="${Id}" data-username="${UserName}">
+                    <img class="imgAvatar" src="{%if $value.Avatar=='' %}/Modules/Chat/css/images/noavatar.png{%else%}${Avatar}{%/if%}"/>
+                    ${FullName}
+                    <span class="online"></span>
+                </a>
+            </li>
         {%/each%}
         </ul>        
     </script>
@@ -32,9 +38,9 @@
         <div id="chatRoom${RoomId}" class="chatRoom">
             <ul id="messages${RoomId}" class="chatMessages"></ul>
             <form id="sendmessage${RoomId}" action="#">
-                <input type="text" id="newmessage${RoomId}" class="chatNewMessage"/>
+                <input type="text" id="newmessage${RoomId}" class="chatNewMessage" placeholder="Nhập tin nhắn"/>
                 <div class="clear"></div>
-                <input type="button" id="chatsend${RoomId}" value="Send" class="chatSend" data-roomid="${RoomId}" />                
+                <input type="button" id="chatsend${RoomId}" value="Gửi" class="chatSend" data-roomid="${RoomId}" />                
             </form>
         </div>
     </script>
