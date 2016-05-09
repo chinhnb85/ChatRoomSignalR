@@ -24,7 +24,12 @@ namespace ChatRoomSignalR
         [WebMethod]
         public static User CheckLogin(string userName, string passWord)
         {
-            var user = UserRepository.GetUserInfoByUserNameAndPassword(userName, passWord);            
+            var user = UserRepository.GetUserInfoByUserNameAndPassword(userName, passWord);
+            if (user != null)
+            {
+                HttpContext.Current.Session["UserName"] = user.UserName;
+                HttpContext.Current.Session["UserId"] = user.Id;
+            }          
             return user;
         }        
     }

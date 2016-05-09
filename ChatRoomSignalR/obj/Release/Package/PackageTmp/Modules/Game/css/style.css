@@ -17,3 +17,23 @@ ul.grid {
     .ui-draggable-dragging {
         z-index: 9999;
     }
+.IMSChat {
+    width: 45%; 
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;    
+    display: none;
+    background: transparent;        
+}
+.btnClose {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+.btnOpenChat {
+    width: 240px;
+    position: fixed;
+    right: 5px;
+    bottom: 2px; 
+}

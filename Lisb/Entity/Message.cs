@@ -15,6 +15,7 @@ namespace Lisb.Entity
         public string UserId { get; set; }
 
         public string UserName { get; set; }
+        public string FullName { get; set; }
 
         public string MessageText { get; set; }
 
@@ -24,7 +25,7 @@ namespace Lisb.Entity
 
         public string DisplayPrefix
         {
-            get { return string.Format("[{0}] {1}: ",MsgDate.ToShortTimeString(),UserName); }            
+            get { return string.Format("[{0}] {1}: ",MsgDate.ToShortTimeString(),FullName); }            
         }
     }
 }

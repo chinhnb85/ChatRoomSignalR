@@ -18,8 +18,9 @@
                 success: function (response) {
                     var user = response.d;
                     if (user.UserName !== null) {
-                        var token = Base64.encode(user.UserName + "&" + user.Id);
-                        window.location = "/Chat.aspx?token=" + token;
+                        //var token = Base64.encode(user.UserName + "&" + user.Id);
+                        //window.location = "/Chat.aspx?token=" + token;
+                        window.location = "/Game.aspx";
                     }
                 }
             });

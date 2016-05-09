@@ -103,7 +103,8 @@ namespace Lisb.Repository
                         {
                             userInfo.Id = dt.Rows[0]["Id"].ToString();
                             userInfo.UserName = dt.Rows[0]["UserName"].ToString();
-                            userInfo.AdminCode = Convert.ToInt32(dt.Rows[0]["AdminCode"].ToString());
+                            userInfo.FullName = dt.Rows[0]["FullName"].ToString();
+                            userInfo.Avatar = dt.Rows[0]["Avatar"].ToString();
                         }
                     }
                 }

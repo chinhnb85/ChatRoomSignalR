@@ -56,6 +56,23 @@
 
         // On click and replace.
         $("#click").one('click', setupGame);
-    });
+
+        $(".btnClose").off('click').on('click', function () {
+            $(".IMSChat").fadeOut('slow');
+            //$(".IMSChat").animate({ opacity: 1, right: "-250px" }, 'slow', function() {
+                
+            //});
+        });
+        $(".btnOpenChat").off('click').on('click', function () {
+            $(".IMSChat").fadeIn('slow');
+            //$(".IMSChat").animate({ opacity: 1, right: "0px" }, 'slow', function () {
+                
+            //});
+        });        
+    });    
 
 })();
+
+function loadIFrameChat(iframe) {
+    $(".IMSChat").append(iframe);
+}

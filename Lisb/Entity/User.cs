@@ -15,6 +15,8 @@ namespace Lisb.Entity
         public string Id { get; set; }
         public string ConnectionId { get; set; }
         public string UserName { get; set; }
+        public string FullName { get; set; }
+        public string Avatar { get; set; }
         public string UserGroup { get; set; }
         public int AdminCode { get; set; }
         //if Freeflag==0 ==> Busy

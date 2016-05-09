@@ -9,8 +9,8 @@ IMSSRChat = new function () {
     var chatRooms = 0;   
 
     window.onbeforeunload = function () {
-        if (chatRooms > 0)
-            return "Tất cả các ô chat của bạn sẽ kết thúc!";
+        //if (chatRooms > 0)
+        //    return "Tất cả các ô chat của bạn sẽ kết thúc!";
     };
 
     this.Init = function() {
@@ -20,9 +20,13 @@ IMSSRChat = new function () {
             //IMSSRChat.loadEvents(objHub);
             var token = getURLParameters("token");
             var param = Base64.decode(token).split("&");
-            var name = param[0];
-            var userid = param[1];
-            objHub.server.connect(name, userid).fail(function (e) {
+            var name=null, userid=null, appfrom=null;
+            if (param.length > 2) {
+                name = param[0];
+                userid = param[1];                
+                appfrom = param[2];
+            }
+            objHub.server.connect(name, userid, appfrom).fail(function (e) {
                 alert(e);
             });
         });
@@ -95,9 +99,10 @@ IMSSRChat = new function () {
 
         objHub.client.onConnected = function (user) {
             
-            $('#welcome').append('<div><p>Welcome:' + user.UserName + '</p></div>');
+            //$('#welcome').append('<div><p>Welcome:' + user.UserName + '</p></div>');
             $('#hUserId').val(user.Id);
-            $('#hUserName').val(user.UserName);            
+            $('#hUserName').val(user.UserName);
+            $('#hFullName').val(user.FullName);
         }
 
         objHub.client.initiateChatUI = function (chatRoom) {
@@ -113,7 +118,7 @@ IMSSRChat = new function () {
                 var e = $('#new-chatroom-template').tmpl(chatRoom);
                 var c = $('#new-chat-header').tmpl(chatRoom);
 
-                var u = $('#hUserId').val() === chatRoom.InitiatedBy ? chatRoom.Users[1].UserName : chatRoom.Users[0].UserName;
+                var u = $('#hUserId').val() === chatRoom.InitiatedBy ? chatRoom.Users[1].FullName : chatRoom.Users[0].FullName;
                 
                 chatRooms++;
 
@@ -133,7 +138,8 @@ IMSSRChat = new function () {
                     "closable": true,
                     "maximizable": false,
                     "minimizable": true,                    
-                    "dblclick": 'maximize'
+                    "dblclick": 'maximize',
+                    "minimizeLocation": "left"
                 };
 
                 e.dialog(dialogOptions).dialogExtend(dialogExtendOptions);
@@ -154,10 +160,12 @@ IMSSRChat = new function () {
 
                     var senderId = $('#hUserId').val();
                     var senderName = $('#hUserName').val();
+                    var fullName = $('#hFullName').val();
 
                     var chatMessage = {
                         UserId: senderId,
                         UserName: senderName,
+                        FullName: fullName,
                         ConversationId: roomId,
                         MessageText: chatRoomNewMessage.val()
                     };

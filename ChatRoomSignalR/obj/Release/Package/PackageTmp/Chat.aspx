@@ -15,6 +15,7 @@
     
     <input id="hUserId" type="hidden" />    
     <input id="hUserName" type="hidden" />
+    <input id="hFullName" type="hidden" />
 
     <script src="/Modules/Chat/main.js"></script>
     
@@ -22,7 +23,7 @@
     <script id="new-online-contacts" type="text/x-jquery-tmpl">        
         <ul>
         {%each Users%}
-            <li id="chatLink${Id}"><a class="chatLink" href="javascript:;" data-id="${Id}" data-username="${UserName}">${UserName}</a></li>
+            <li id="chatLink${Id}"><img class="imgAvatar" src="{%if $index==1 %} /Modules/Chat/css/images/noavatar.png {%else%} ${Avatar} {%/if%}"/><a class="chatLink" href="javascript:;" data-id="${Id}" data-username="${UserName}">${FullName} <i class="online"></i></a></li>
         {%/each%}
         </ul>        
     </script>

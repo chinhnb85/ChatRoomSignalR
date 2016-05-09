@@ -37,13 +37,22 @@ namespace ChatRoomSignalR.Hubs
         #region public methods
 
         [HubMethodName("connect")]
-        public bool Connect(string username,string password)
+        public bool Connect(string username,string userId,string appfrom)
         {            
             try
             {
-                var user = UserRepository.GetUserInfoByUserName(username);                
-
-                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || user == null)
+                var user=new User();
+                switch (appfrom.Replace("\0",""))
+                {
+                    case "AppSeo":
+                        user = UserRepositoryAppSeo.GetUserInfoByUserName(username);
+                        break;
+                    case "AppDemo":
+                        user = UserRepository.GetUserInfoByUserName(username);
+                        break;
+                }
+                
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(userId) || user == null || appfrom==null)
                 {
                     return false;
                 }                
@@ -247,7 +256,7 @@ namespace ChatRoomSignalR.Hubs
 
         private void AddUser(User obj)
         {
-            var user = new User {Id = obj.Id, UserName = obj.UserName, ConnectionId = Context.ConnectionId};
+            var user = new User {Id = obj.Id, UserName = obj.UserName,FullName = obj.FullName,Avatar = obj.Avatar,ConnectionId = Context.ConnectionId};
             ChatUsers[obj.Id] = user;            
         }
 
@@ -255,6 +264,8 @@ namespace ChatRoomSignalR.Hubs
         {
             var user = GetChatUserByUserId(obj.Id);
             user.UserName = obj.UserName;
+            user.FullName = obj.FullName;
+            user.Avatar = obj.Avatar;
             user.ConnectionId = Context.ConnectionId;
             ChatUsers[obj.Id] = user;            
         }

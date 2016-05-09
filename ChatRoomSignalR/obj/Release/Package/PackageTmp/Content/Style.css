@@ -1,14 +1,14 @@
 ﻿body {
-    margin: 0;padding: 0;font-size: 13px;color: #333;font-family: Arial;background-color:#EEEEEE;
+    margin: 0;padding: 0;font-size: 13px;color: #333;font-family: Arial;background:transparent!important;
 }
 #divListUser {
-    width: 20%;
-    min-width: 150px;
+    width: 250px;    
     height: 100%;
     position: fixed;
     top: 0;
     right: 0;
     border-left: 1px solid #ccc;
+    background: #fff;
 }
 #divListUser ul{ list-style: none;}
 .offline{ width: 10px;height: 10px;background: #ccc;border-radius: 50%;display: inline-block;}
@@ -47,6 +47,7 @@
     position: absolute;
     bottom: 0;left: 0;
     width: 100%;
+    opacity: 1;
 }
 .w_chat .btnClose {
     position: absolute;
@@ -59,7 +60,7 @@
 #wrapper
 {
     max-width: 62.5em; /* 1000 px */
-    margin: 0 auto;
+    margin: 0 auto;    
 }
 #imgLoad
 {
