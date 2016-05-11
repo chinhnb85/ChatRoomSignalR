@@ -41,28 +41,30 @@ namespace ChatRoomSignalR.Hubs
         {            
             try
             {
-                var user=new User();
+                var user=new User();                
                 switch (appfrom.Replace("\0",""))
                 {
                     case "AppSeo":
-                        user = UserRepositoryAppSeo.GetUserInfoByUserName(username);
+                        user = UserRepositoryAppSeo.GetUserInfoByUserName(username);                        
                         break;
                     case "AppDemo":
                         user = UserRepository.GetUserInfoByUserName(username);
                         break;
                 }
                 
-                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(userId) || user == null || appfrom==null)
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(userId) || user == null || string.IsNullOrEmpty(appfrom))
                 {
                     return false;
                 }                
 
                 if (GetChatUserByUserId(user.Id) == null)
                 {
+                    user.AppFrom = appfrom.Replace("\0", "");
                     AddUser(user);
                 }
                 else
                 {
+                    user.AppFrom = appfrom.Replace("\0", "");
                     ModifyUser(user);
                 }
 
@@ -118,6 +120,9 @@ namespace ChatRoomSignalR.Hubs
                         {
                             //Generate Client UI for this room
                             Clients.Caller.initiateChatUI(chatRoom);
+                            //Load history
+                            var listHistory = ConversationRepository.GetHistoryConversation(fromUser.Id, toUser.Id,fromUser.AppFrom);
+                            Clients.Caller.loadHistoryUI(chatRoom, listHistory);
                         }
                     }
                     else
@@ -125,8 +130,12 @@ namespace ChatRoomSignalR.Hubs
                         var chatRoom = GetRoomId(fromUser, toUser);
                         if (true)
                         {
-                            //Generate Client UI for this room
+                            var listHistory = ConversationRepository.GetHistoryConversation(fromUser.Id, toUser.Id, fromUser.AppFrom);
+
+                            //Generate Client UI for this room                            
                             Clients.Caller.initiateChatUI(chatRoom);
+                            //Load history                            
+                            Clients.Caller.loadHistoryUI(chatRoom, listHistory);
                         }
                     }                    
                 }
@@ -150,30 +159,30 @@ namespace ChatRoomSignalR.Hubs
                 {
                     if (ChatRooms[room.RoomId].InitiatedBy == message.UserId)
                     {
-                        message.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", message.UserName);
+                        message.MessageText = string.Format("{0} đã ngừng trò chuyện. kết thúc chat!", message.FullName);
                         if (ChatRooms.TryRemove(room.RoomId, out room))
                         {
                             Clients.Group(room.RoomId).receiveEndChatMessage(message);
-                            foreach (var messageReceipient in room.Users)
+                            foreach (var user in room.Users)
                             {
-                                if (messageReceipient.RoomIds.Contains(room.RoomId))
+                                if (user.RoomIds.Contains(room.RoomId))
                                 {
-                                    messageReceipient.RoomIds.Remove(room.RoomId);
-                                    Groups.Remove(messageReceipient.ConnectionId, room.RoomId);
+                                    user.RoomIds.Remove(room.RoomId);
+                                    Groups.Remove(user.ConnectionId, room.RoomId);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        var messageRecipient = GetChatUserByUserId(message.UserId);
-                        if (messageRecipient != null && messageRecipient.RoomIds.Contains(room.RoomId))
+                        var user = GetChatUserByUserId(message.UserId);
+                        if (user != null && user.RoomIds.Contains(room.RoomId))
                         {
-                            room.Users.Remove(messageRecipient);
-                            messageRecipient.RoomIds.Remove(room.RoomId);
+                            room.Users.Remove(user);
+                            user.RoomIds.Remove(room.RoomId);
                             if (room.Users.Count < 2)
                             {
-                                message.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", message.UserName);
+                                message.MessageText = string.Format("{0} đã ngừng trò chuyện. kết thúc chat!", message.FullName);
                                 if (ChatRooms.TryRemove(room.RoomId, out room))
                                 {
                                     Clients.Group(room.RoomId).receiveEndChatMessage(message);
@@ -189,9 +198,9 @@ namespace ChatRoomSignalR.Hubs
                             }
                             else
                             {
-                                message.MessageText = string.Format("{0} ngừng trò chuyện.", message.UserName);
-                                Groups.Remove(messageRecipient.ConnectionId, room.RoomId);
-                                Clients.Group(messageRecipient.ConnectionId).receiveEndChatMessage(message);
+                                message.MessageText = string.Format("{0} đã ngừng trò chuyện.", message.FullName);
+                                Groups.Remove(user.ConnectionId, room.RoomId);
+                                Clients.Group(user.ConnectionId).receiveEndChatMessage(message);
                                 Clients.Group(room.RoomId).receiveLeftChatMessage(message);
                                 Clients.Group(room.RoomId).updateChatUI(room);
                             }
@@ -218,7 +227,39 @@ namespace ChatRoomSignalR.Hubs
                 {
                     message.Id = Guid.NewGuid().ToString();
                     message.MsgDate = DateTime.Now;
-                    Clients.Group(message.ConversationId).receiveChatMessage(message, room);
+
+                    var useridto = room.InitiatedTo;
+                    if (useridto == message.UserId)
+                    {
+                        useridto = room.InitiatedBy;
+                    }
+                    User user;
+                    var appfrom = string.Empty;
+                    if (ChatUsers.TryGetValue(message.UserId, out user))
+                    {
+                        appfrom = user.AppFrom;
+                    }
+
+                    var listHistory = ConversationRepository.GetHistoryConversation(message.UserId, useridto, appfrom);
+
+                    Clients.Group(message.ConversationId).receiveChatMessage(message, room,listHistory);                    
+
+                    //save message to data
+
+                    var conversation= new Conversation
+                    {
+                        MsgId = message.Id,
+                        Msg = message.MessageText,
+                        MsgDate = message.MsgDate,
+                        ConversationId = message.ConversationId,
+                        InitiatedBy = message.UserId,                        
+                        InitiatedTo = useridto,
+                        AppFrom = appfrom,
+                        UserName = message.UserName,
+                        FullName = message.FullName
+                    };
+                    ConversationRepository.SaveConversation(conversation);
+
                     return true;
                 }
                 return false;
@@ -256,7 +297,7 @@ namespace ChatRoomSignalR.Hubs
 
         private void AddUser(User obj)
         {
-            var user = new User {Id = obj.Id, UserName = obj.UserName,FullName = obj.FullName,Avatar = obj.Avatar,ConnectionId = Context.ConnectionId};
+            var user = new User {Id = obj.Id, UserName = obj.UserName,FullName = obj.FullName,Avatar = obj.Avatar,ConnectionId = Context.ConnectionId,AppFrom = obj.AppFrom};
             ChatUsers[obj.Id] = user;            
         }
 
@@ -267,6 +308,7 @@ namespace ChatRoomSignalR.Hubs
             user.FullName = obj.FullName;
             user.Avatar = obj.Avatar;
             user.ConnectionId = Context.ConnectionId;
+            user.Avatar = obj.AppFrom;
             ChatUsers[obj.Id] = user;            
         }
 
@@ -293,7 +335,7 @@ namespace ChatRoomSignalR.Hubs
                     chatMessage.UserName = oUser.UserName;
                     if (ChatRooms[roomId].InitiatedBy == oUser.Id)
                     {
-                        chatMessage.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", oUser.UserName);
+                        chatMessage.MessageText = string.Format("{0} đã ngừng trò chuyện. kết thúc chat!", oUser.FullName);
                         Room room;
 
                         if (ChatRooms.TryRemove(roomId, out room))
@@ -312,7 +354,7 @@ namespace ChatRoomSignalR.Hubs
                     {
                         if (ChatRooms[roomId].Users.Count() < 2)
                         {
-                            chatMessage.MessageText = string.Format("{0} ngừng trò chuyện. kết thúc chat!", oUser.UserName);
+                            chatMessage.MessageText = string.Format("{0} đã ngừng trò chuyện. kết thúc chat!", oUser.FullName);
                             Room room;
                             if (ChatRooms.TryRemove(roomId, out room))
                             {
@@ -328,7 +370,7 @@ namespace ChatRoomSignalR.Hubs
                         }
                         else
                         {
-                            chatMessage.MessageText = string.Format("{0} ngừng trò chuyện.", oUser.UserName);
+                            chatMessage.MessageText = string.Format("{0} đã ngừng trò chuyện.", oUser.FullName);
                             Clients.Group(roomId).receiveLeftChatMessage(chatMessage);
                         }
                     }

@@ -20,12 +20,13 @@ namespace Lisb.Entity
         public string MessageText { get; set; }
 
         public string UserGroup { get; set; }
+        public string AppFrom { get; set; }
 
         public DateTime MsgDate { get; set; }
 
         public string DisplayPrefix
         {
-            get { return string.Format("[{0}] {1}: ",MsgDate.ToShortTimeString(),FullName); }            
+            get { return string.Format("[{0}] {1} ",MsgDate.ToShortTimeString(),FullName); }            
         }
     }
 }

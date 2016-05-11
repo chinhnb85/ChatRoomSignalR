@@ -27,7 +27,7 @@ IMSSRChat = new function () {
                 appfrom = param[2];
             }
             objHub.server.connect(name, userid, appfrom).fail(function (e) {
-                alert(e);
+                objHub.client.onErrorMessage(e);
             });
         });
 
@@ -68,11 +68,9 @@ IMSSRChat = new function () {
 
     this.loadClientMethods = function (objHub) {
         
-        objHub.client.onErrorMessage = function (msg) {
-            var divNoExist = $('<div><p>' + msg + '</P></div>');
-            $(divNoExist).hide();
-            $('#chatError').prepend(divNoExist);
-            $(divNoExist).fadeIn(900).delay(9000).fadeOut(900);
+        objHub.client.onErrorMessage = function (msg) {                        
+            $('#chatError').prepend(msg);
+            $('#chatError').fadeIn(900).delay(9000).fadeOut(900);
         }
 
         objHub.client.onGetAllOnlineUsers = function (chatUsers) {
@@ -83,7 +81,7 @@ IMSSRChat = new function () {
 
             $(".chatLink").off("click").on("click", function() {
                 if (objHub == null) {
-                    alert("Gặp sự cố kết nối tới server. Hay liên hệ với Admin!");
+                    objHub.client.onErrorMessage("Gặp sự cố kết nối tới server. Hay liên hệ với Admin!");
                     return;
                 }                
                 var senderId = $('#hUserId').val();
@@ -92,7 +90,7 @@ IMSSRChat = new function () {
                 var toUserName = $(this).attr("data-username");
 
                 objHub.server.initiateChat(senderId, senderName, toUserId, toUserName).fail(function (e) {
-                    alert(e);
+                    objHub.client.onErrorMessage(e);
                 });
             });
         };
@@ -103,9 +101,10 @@ IMSSRChat = new function () {
             $('#hUserId').val(user.Id);
             $('#hUserName').val(user.UserName);
             $('#hFullName').val(user.FullName);
+            $('#hAppFrom').val(user.AppFrom);
         }
 
-        objHub.client.initiateChatUI = function (chatRoom) {
+        objHub.client.initiateChatUI = function (chatRoom, history) {
             var chatRoomDiv = $('#chatRoom' + chatRoom.RoomId);
             if (($(chatRoomDiv).length > 0)) {
                 var chatRoomText = $('#newmessage' + chatRoom.RoomId);
@@ -115,8 +114,7 @@ IMSSRChat = new function () {
                 chatRoomSend.show();                
             }
             else {
-                var e = $('#new-chatroom-template').tmpl(chatRoom);
-                var c = $('#new-chat-header').tmpl(chatRoom);
+                var e = $('#new-chatroom-template').tmpl(chatRoom);                
 
                 var u = $('#hUserId').val() === chatRoom.InitiatedBy ? chatRoom.Users[1].FullName : chatRoom.Users[0].FullName;
                 
@@ -126,8 +124,8 @@ IMSSRChat = new function () {
                 var dialogOptions = {
                     "id": '#messages' + chatRoom.RoomId,
                     "title": u,
-                    "width": 360,
-                    "height": 365,
+                    "width": 280,
+                    "height": 355,
                     "modal": false,
                     "resizable": false,
                     "close": function () { javascript: IMSSRChat.endChat(objHub,'' + chatRoom.RoomId + ''); $(this).remove(); }
@@ -161,11 +159,13 @@ IMSSRChat = new function () {
                     var senderId = $('#hUserId').val();
                     var senderName = $('#hUserName').val();
                     var fullName = $('#hFullName').val();
+                    var appFrom = $('#hAppFrom').val();
 
                     var chatMessage = {
                         UserId: senderId,
                         UserName: senderName,
                         FullName: fullName,
+                        AppFrom: appFrom,
                         ConversationId: roomId,
                         MessageText: chatRoomNewMessage.val()
                     };
@@ -173,18 +173,35 @@ IMSSRChat = new function () {
                     chatRoomNewMessage.val('');
                     chatRoomNewMessage.focus();
                     objHub.server.sendChatMessage(chatMessage).fail(function (e) {
-                        alert(e);
+                        objHub.client.onErrorMessage(e);
                     });
 
                     return false;
                 });
+
+                if (history !== undefined & history.length > 0) {
+                    objHub.client.loadHistoryUI(chatRoom, history);
+                }
             }
         };
 
-        objHub.client.receiveChatMessage = function (message, room) {
-            objHub.client.initiateChatUI(room);
+        objHub.client.loadHistoryUI = function (chatRoom, history) {
+            var chatRoomDiv = $('#chatRoom' + chatRoom.RoomId);
+            if (($(chatRoomDiv).length > 0)) {
+                var chatRoomMessages = $('#messages' + chatRoom.RoomId);
+                var e = $('#history-message-template').tmpl(history).appendTo(chatRoomMessages);
+                e[0].scrollIntoView();
+            }                       
+        };
+
+        objHub.client.receiveChatMessage = function (message, room, history) {
+            objHub.client.initiateChatUI(room, history);
             var chatRoom = $('#chatRoom' + message.ConversationId);
             var chatRoomMessages = $('#messages' + message.ConversationId);
+            var today = $('#todaymessages' + room.RoomId);
+            if (today.length < 1) {
+                $('#today-message-template').tmpl(room).appendTo(chatRoomMessages);
+            }            
             var e = $('#new-message-template').tmpl(message).appendTo(chatRoomMessages);
             e[0].scrollIntoView();
             //chatRoom.scrollIntoView();
@@ -227,17 +244,19 @@ IMSSRChat = new function () {
 
         var senderId = $('#hUserId').val();
         var senderName = $('#hUserName').val();
+        var fullName = $('#hFullName').val();
 
         var chatMessage = {
             UserId: senderId,
             UserName: senderName,
+            FullName: fullName,
             ConversationId: roomId,
             MessageText: chatRoomNewMessage.val()
         };
         chatRoomNewMessage.val('');
         chatRoomNewMessage.focus();
         objHub.server.endChat(chatMessage).fail(function (e) {
-            alert(e);
+            objHub.client.onErrorMessage(e);
         });
     };    
 };

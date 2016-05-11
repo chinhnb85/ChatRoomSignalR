@@ -23,7 +23,7 @@ namespace Lisb.Repository
 
                     using (var cmd=new SqlCommand(query,connection))
                     {
-                        var render = cmd.ExecuteReader();
+                        var render = cmd.ExecuteReader();                        
                         DataTable dt = new DataTable();
                         dt.Load(render);
                         if (dt.Rows.Count > 0)
@@ -33,6 +33,8 @@ namespace Lisb.Repository
                             userInfo.AdminCode = Convert.ToInt32(dt.Rows[0]["AdminCode"].ToString());
                         }
                     }
+
+                    connection.Close();
                 }
 
                 return userInfo;
@@ -101,12 +103,13 @@ namespace Lisb.Repository
                         dt.Load(render);
                         if (dt.Rows.Count > 0)
                         {
-                            userInfo.Id = dt.Rows[0]["Id"].ToString();
+                            userInfo.Id = dt.Rows[0]["Id"]+"AppDemo";
                             userInfo.UserName = dt.Rows[0]["UserName"].ToString();
                             userInfo.FullName = dt.Rows[0]["FullName"].ToString();
                             userInfo.Avatar = dt.Rows[0]["Avatar"].ToString();
                         }
                     }
+                    connection.Close();
                 }
 
                 return userInfo;

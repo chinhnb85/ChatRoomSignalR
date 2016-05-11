@@ -9,13 +9,14 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
     <div id="welcome"></div>
-    <div id="chatError"></div>
+    <div id="chatError" class="alert alert-danger"></div>
     <div id="chatRooms"></div>
     <div id="chatOnlineUser"></div>
     
     <input id="hUserId" type="hidden" />    
     <input id="hUserName" type="hidden" />
     <input id="hFullName" type="hidden" />
+    <input id="hAppFrom" type="hidden" />
 
     <script src="/Modules/Chat/main.js"></script>
     
@@ -43,30 +44,32 @@
                 <input type="button" id="chatsend${RoomId}" value="Gửi" class="chatSend" data-roomid="${RoomId}" />                
             </form>
         </div>
-    </script>
-
-    <script id="new-chat-header" type="text/x-jquery-tmpl">
-        <div id="chatRoomHeader${RoomId}">
-            {%each Users%}
-                {%if $index == 0%}
-                    ${UserName}
-                {%else%}
-                    , ${UserName}
-                {%/if%}
-            {%/each%}
-        </div>
-    </script>
+    </script>    
     
     <script id="new-message-template" type="text/x-jquery-tmpl">
-    <li class="message" id="m-${Id}">
-        <strong>${DisplayPrefix}</strong>
-        {{html MessageText}}
-    </li>
+        <li class="message" id="m-${Id}">
+            <strong>${DisplayPrefix}: </strong>
+            {%html MessageText%}
+        </li>
+    </script>
+    
+    <script id="history-message-template" type="text/x-jquery-tmpl">
+        <li class="message" id="m-${MsgId}">
+            <strong>${DisplayPrefix}: </strong>
+            {%html Msg%}
+        </li>
+    </script>
+    
+    <script id="today-message-template" type="text/x-jquery-tmpl">
+        <li id="todaymessages${RoomId}" class="todaymessages">
+            <hr/>
+            <strong>Hôm nay</strong>            
+        </li>
     </script>
     
     <script id="new-notify-message-template" type="text/x-jquery-tmpl">
-        <li class="message" id="m-${Id}">
-            <strong>{{html MessageText}}</strong>
+        <li class="notifymessage">
+            <strong>{%html MessageText%}</strong>
         </li>
     </script>
 

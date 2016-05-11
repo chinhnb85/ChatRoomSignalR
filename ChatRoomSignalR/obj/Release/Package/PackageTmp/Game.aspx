@@ -27,7 +27,7 @@
     <div class="IMSChat">
         <a class="btn btn-sm btn-danger btnClose">
             <span class="fa fa-close"></span>
-            Chat
+            Đóng
         </a>
         <%--<iframe src="http://192.168.38.97:8080/Chat.aspx?token=YWRtaW4mMiZBcHBTZW8=" allowtransparency="true" frameBorder="0" width="100%" height="100%"></iframe>--%>
     </div>

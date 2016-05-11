@@ -57,14 +57,16 @@
         // On click and replace.
         $("#click").one('click', setupGame);
 
-        $(".btnClose").off('click').on('click', function () {
+        $(".btnClose").off('click').on('click', function () {            
             $(".IMSChat").fadeOut('slow');
+            $(".btnOpenChat").fadeIn('slow');
             //$(".IMSChat").animate({ opacity: 1, right: "-250px" }, 'slow', function() {
-                
+
             //});
         });
-        $(".btnOpenChat").off('click').on('click', function () {
+        $(".btnOpenChat").off('click').on('click', function () {            
             $(".IMSChat").fadeIn('slow');
+            $(".btnOpenChat").fadeOut('slow');
             //$(".IMSChat").animate({ opacity: 1, right: "0px" }, 'slow', function () {
                 
             //});
@@ -73,6 +75,14 @@
 
 })();
 
-function loadIFrameChat(iframe) {
+function loadIFrameChat(iframe) {    
     $(".IMSChat").append(iframe);
+    var f = navigator.userAgent.search("Firefox");
+    if (f > -1)
+    {
+        $(".IMSChat").css("display", "block");
+        setTimeout(function() {
+            $(".IMSChat").fadeOut();
+        },200);
+    }
 }

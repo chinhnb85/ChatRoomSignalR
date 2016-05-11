@@ -16,6 +16,7 @@ namespace Lisb.Entity
         public string ConnectionId { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
+        public string AppFrom { get; set; }
         public string Avatar { get; set; }
         public string UserGroup { get; set; }
         public int AdminCode { get; set; }

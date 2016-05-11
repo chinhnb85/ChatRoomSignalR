@@ -23,7 +23,7 @@
 .chatMessages li
 {
     list-style-type: none;
-    padding: 1px;
+    padding: 2px 10px;
 }
 .chatNewMessage
 {
@@ -56,6 +56,18 @@
     width: 32px;
     margin: 0 5px; 
 }
+#chatError{ display: none;width: 350px;margin: 0 auto;margin-top: 5px;}
+.todaymessages{position: relative;
+    height: 25px;
+    display: block;}
+.todaymessages hr{margin: 10px 0;}
+.todaymessages strong{color: #006400;
+    position: absolute;
+    top: 2px;
+    left: 105px;
+    background: #fff;
+    padding: 0 10px;}
+.notifymessage{ color: red;}
 
 .ui-dialog .ui-dialog-titlebar-close{ height: 18px;}
 .ui-dialog .ui-dialog-content{padding: 0 0px}
@@ -96,6 +108,6 @@
 .online{width: 8px;height: 8px;background: green;border-radius: 50%;
         float: right;
     line-height: 32px;
-    margin: 12px 12px 0 0;
+    margin: 10px 12px 0 0;
     text-align: right;display: inline-block;
 }
